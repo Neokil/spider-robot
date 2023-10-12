@@ -20,44 +20,121 @@ public:
             _servoWrappers[i] = new ServoWrapper(servos[i].Pin, servos[i].Orientation);
         }
     }
+    ~Spider()
+    {
+        for (int i = 0; i < 12; i++)
+        {
+            _servoWrappers[i]->~ServoWrapper();
+        }
+    }
 
     void StandUp()
     {
         Serial.println("going into standing position");
         queueState("standing_1",
-                   125, 120, 45,
-                   125, 120, 45,
-                   55, 120, 45,
-                   55, 120, 45);
+                   105, 120, 45,
+                   105, 120, 45,
+                   75, 120, 45,
+                   75, 120, 45);
 
         queueState("standing_2",
-                   125, 90, 90,
-                   125, 90, 90,
-                   55, 90, 90,
-                   55, 90, 90);
+                   105, 90, 90,
+                   105, 90, 90,
+                   75, 90, 90,
+                   75, 90, 90);
     }
 
-    void TakeStep()
+    void TakeStep1()
     {
         queueState("step_0",
-                   125, 90, 90,
-                   125, 90, 90,
-                   55, 90, 90,
-                   55, 90, 90);
-        queueState("step_1",
+                   105, 90, 90,
+                   105, 90, 90,
+                   75, 90, 90,
+                   75, 90, 90);
+
+        // step front right
+        queueState("step_fr_1",
                    0, 0, 0,
                    0, 135, 45,
-                   0, 0, 110,
+                   0, 110, 70,
                    0, 0, 0);
-        queueState("step_2",
+        queueState("step_fr_2",
                    0, 0, 0,
                    135, 0, 0,
                    0, 0, 0,
                    0, 0, 0);
-        queueState("step_3",
+        queueState("step_fr_3",
                    0, 0, 0,
                    0, 90, 90,
-                   0, 0, 90,
+                   0, 90, 90,
+                   0, 0, 0);
+    }
+
+    void TakeStep2()
+    {
+        // step front left
+        queueState("step_fl_1",
+                   0, 135, 45,
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 110, 70);
+        queueState("step_fl_2",
+                   135, 0, 0,
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 0, 0);
+        queueState("step_fl_3",
+                   0, 90, 90,
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 90, 90);
+    }
+
+    void TakeStep3()
+    {
+        // move body
+
+        queueState("step_mb",
+                   105, 0, 0,
+                   105, 0, 0,
+                   45, 0, 0,
+                   45, 0, 0);
+
+        // step back right
+        queueState("step_br_1",
+                   0, 110, 70,
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 135, 45);
+        queueState("step_br_2",
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 0, 0,
+                   75, 0, 0);
+        queueState("step_br_3",
+                   0, 90, 90,
+                   0, 0, 0,
+                   0, 0, 0,
+                   0, 90, 90);
+    }
+
+    void TakeStep4()
+    {
+        // step back left
+        queueState("step_bl_1",
+                   0, 0, 0,
+                   0, 110, 70,
+                   0, 135, 45,
+                   0, 0, 0);
+        queueState("step_bl_2",
+                   0, 0, 0,
+                   0, 0, 0,
+                   75, 0, 0,
+                   0, 0, 0);
+        queueState("step_bl_3",
+                   0, 0, 0,
+                   0, 90, 90,
+                   0, 90, 90,
                    0, 0, 0);
     }
 

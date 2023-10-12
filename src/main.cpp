@@ -30,27 +30,51 @@ void setup()
 
   spider = new Spider(5, initData);
   spider->StandUp();
-  // spider->TakeStep();
-  //  spider->TakeStep();
 
   Serial.println("Setup end");
 }
-
-String command = "";
 
 long lastUpdate = 0;
 void loop()
 {
   long timeTaken = millis() - lastUpdate;
   lastUpdate = millis();
+  bool stateReached;
 
-  bool stateReached = spider->UpdateServos(timeTaken / 10);
-  delay(10);
+  if (spider != NULL)
+  {
+    stateReached = spider->UpdateServos(timeTaken / 10);
+  }
 
   if (stateReached)
   {
-    delay(1000);
-    Serial.println("taking step");
-    spider->TakeStep();
+    state++;
+
+    switch (state)
+    {
+    case 1:
+      Serial.println("taking step 1");
+      spider->TakeStep1();
+      break;
+    case 2:
+      Serial.println("taking step 2");
+      spider->TakeStep2();
+      break;
+    case 3:
+      Serial.println("taking step 3");
+      spider->TakeStep3();
+      break;
+    case 4:
+      Serial.println("taking step 4");
+      spider->TakeStep4();
+      break;
+    case 5:
+      delay(2500);
+      spider->~Spider();
+      spider = NULL;
+      break;
+    }
   }
+
+  delay(10);
 }

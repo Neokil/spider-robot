@@ -12,8 +12,14 @@ public:
         _servo.attach(pin);
         _servo.write(_targetFrequency);
         Serial.print("Initialized Servo at pin ");
-        Serial.print(pin);
+        Serial.print(_pin);
         Serial.println(" with 90deg");
+    }
+    ~ServoWrapper()
+    {
+        _servo.detach();
+        Serial.print("Detached Servo at pin ");
+        Serial.println(_pin);
     }
     void SetDegree(int deg)
     {
