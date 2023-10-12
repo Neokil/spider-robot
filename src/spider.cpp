@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <queue>
 #include "servoWrapper.cpp"
-#include "spiderStates.cpp"
 #include "shared.h"
 
 struct ServoInitData
@@ -40,39 +39,35 @@ public:
 
     void TakeStep()
     {
-        auto states = (new SpiderState("step",
-                                       125, 90, 90,
-                                       125, 90, 90,
-                                       55, 90, 90,
-                                       55, 90, 90))
-                          ->then(0, 0, 0,
-                                 0, 45, -45,
-                                 0, 0, 20,
-                                 0, 0, 0)
-                          ->then(0, 0, 0,
-                                 10, 0, 0,
-                                 0, 0, 0,
-                                 0, 0, 0)
-                          ->then(0, 0, 0,
-                                 0, -45, 45,
-                                 0, 0, -20,
-                                 0, 0, 0)
-                          ->getStates();
-
-        while (!states.empty())
-        {
-            queueState(states.front());
-            states.pop();
-        }
+        queueState("step_0",
+                   125, 90, 90,
+                   125, 90, 90,
+                   55, 90, 90,
+                   55, 90, 90);
+        queueState("step_1",
+                   0, 0, 0,
+                   0, 135, 45,
+                   0, 0, 110,
+                   0, 0, 0);
+        queueState("step_2",
+                   0, 0, 0,
+                   135, 0, 0,
+                   0, 0, 0,
+                   0, 0, 0);
+        queueState("step_3",
+                   0, 0, 0,
+                   0, 90, 90,
+                   0, 0, 90,
+                   0, 0, 0);
     }
 
-    bool UpdateServos()
+    bool UpdateServos(float factor)
     {
         bool done = true;
 
         for (auto servoWrapper : _servoWrappers)
         {
-            servoWrapper->Move(_servoSpeed);
+            servoWrapper->Move(_servoSpeed * factor);
             if (servoWrapper->IsMoving())
             {
                 done = false;
@@ -147,20 +142,56 @@ private:
 protected:
     void SetServos(int servoFL1Deg, int servoFL2Deg, int servoFL3Deg, int servoFR1Deg, int servoFR2Deg, int servoFR3Deg, int servoBL1Deg, int servoBL2Deg, int servoBL3Deg, int servoBR1Deg, int servoBR2Deg, int servoBR3Deg)
     {
-        (*_servoWrappers[0]).SetDegree(servoFL1Deg);
-        (*_servoWrappers[1]).SetDegree(servoFL2Deg);
-        (*_servoWrappers[2]).SetDegree(servoFL3Deg);
+        if (servoFL1Deg != 0)
+        {
+            (*_servoWrappers[0]).SetDegree(servoFL1Deg);
+        }
+        if (servoFL2Deg != 0)
+        {
+            (*_servoWrappers[1]).SetDegree(servoFL2Deg);
+        }
+        if (servoFL3Deg != 0)
+        {
+            (*_servoWrappers[2]).SetDegree(servoFL3Deg);
+        }
 
-        (*_servoWrappers[3]).SetDegree(servoFR1Deg);
-        (*_servoWrappers[4]).SetDegree(servoFR2Deg);
-        (*_servoWrappers[5]).SetDegree(servoFR3Deg);
+        if (servoFR1Deg != 0)
+        {
+            (*_servoWrappers[3]).SetDegree(servoFR1Deg);
+        }
+        if (servoFR2Deg != 0)
+        {
+            (*_servoWrappers[4]).SetDegree(servoFR2Deg);
+        }
+        if (servoFR3Deg != 0)
+        {
+            (*_servoWrappers[5]).SetDegree(servoFR3Deg);
+        }
 
-        (*_servoWrappers[6]).SetDegree(servoBL1Deg);
-        (*_servoWrappers[7]).SetDegree(servoBL2Deg);
-        (*_servoWrappers[8]).SetDegree(servoBL3Deg);
+        if (servoBL1Deg != 0)
+        {
+            (*_servoWrappers[6]).SetDegree(servoBL1Deg);
+        }
+        if (servoBL2Deg != 0)
+        {
+            (*_servoWrappers[7]).SetDegree(servoBL2Deg);
+        }
+        if (servoBL3Deg != 0)
+        {
+            (*_servoWrappers[8]).SetDegree(servoBL3Deg);
+        }
 
-        (*_servoWrappers[9]).SetDegree(servoBR1Deg);
-        (*_servoWrappers[10]).SetDegree(servoBR2Deg);
-        (*_servoWrappers[11]).SetDegree(servoBR3Deg);
+        if (servoBR1Deg != 0)
+        {
+            (*_servoWrappers[9]).SetDegree(servoBR1Deg);
+        }
+        if (servoBR2Deg != 0)
+        {
+            (*_servoWrappers[10]).SetDegree(servoBR2Deg);
+        }
+        if (servoBR3Deg != 0)
+        {
+            (*_servoWrappers[11]).SetDegree(servoBR3Deg);
+        }
     }
 };
